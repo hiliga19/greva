@@ -1,335 +1,103 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>نظام إدارة التوقف عن العمل</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #555;
-        }
-        input[type="text"], input[type="email"], input[type="tel"], 
-        input[type="password"], select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .hidden {
-            display: none;
-        }
-        .admin-login-box {
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #007bff;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .stats-box {
-            background-color: #e9f7ef;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        #searchInput {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 2px solid #007bff;
-            border-radius: 5px;
-        }
-    </style>
+    <!-- ... نفس الجزء العلوي من الكود حتى بداية العنصر body ... -->
 </head>
 <body>
 
-    <!-- صفحة تسجيل الدخول الرئيسية -->
-    <div id="userLoginPage" class="container">
-        <h1>تسجيل الدخول</h1>
-        <label for="userLoginEmail">البريد الإلكتروني:</label>
-        <input type="email" id="userLoginEmail" required>
-        
-        <label for="userLoginPassword">كلمة المرور:</label>
-        <input type="password" id="userLoginPassword" required>
-        
-        <button onclick="loginUser()">تسجيل الدخول</button>
-        
-        <div class="admin-login-box" onclick="showAdminLoginPage()">
-            دخول خاص بالمديرية
-        </div>
-        
-        <p style="text-align: center; margin-top: 20px;">
-            ليس لديك حساب؟ 
-            <button onclick="showRegisterPage()" class="text-link">
-                إنشاء حساب جديد
-            </button>
-        </p>
-    </div>
-
-    <!-- صفحة تسجيل المستخدم الجديد -->
-    <div id="registerPage" class="container hidden">
-        <h1>إنشاء حساب جديد</h1>
-        <label for="userRegisterEmail">البريد الإلكتروني:</label>
-        <input type="email" id="userRegisterEmail" required>
-        
-        <label for="userRegisterPassword">كلمة المرور:</label>
-        <input type="password" id="userRegisterPassword" required>
-        
-        <button onclick="registerUser()">إنشاء الحساب</button>
-        
-        <p style="text-align: center; margin-top: 20px;">
-            <button onclick="showLoginPage()" class="text-link">
-                العودة لتسجيل الدخول
-            </button>
-        </p>
-    </div>
-
-    <!-- صفحة إدخال البيانات -->
-    <div id="dataPage" class="container hidden">
-        <h1>إدخال بيانات التوقف عن العمل</h1>
-        
-        <div class="stats-box">
-            <h3>إحصائيات اليوم:</h3>
-            <p>عدد المتوقفين: <span id="currentStoppage">0</span></p>
-            <p>النسبة المئوية: <span id="stoppagePercentage">0%</span></p>
-        </div>
-
-        <label for="stoppageReason">سبب التوقف:</label>
-        <select id="stoppageReason">
-            <option value="تقني">أعطال تقنية</option>
-            <option value="إداري">أسباب إدارية</option>
-            <option value="طوارئ">حالات طارئة</option>
-        </select>
-
-        <label for="stoppageDuration">المدة (بالساعات):</label>
-        <input type="number" id="stoppageDuration" min="1" value="1">
-
-        <button onclick="saveStoppageData()">حفظ البيانات</button>
-    </div>
-
-    <!-- صفحة دخول المدير -->
-    <div id="adminLoginPage" class="container hidden">
-        <h1>دخول المدير</h1>
-        <label for="adminUsername">اسم المستخدم:</label>
-        <input type="text" id="adminUsername" required>
-        
-        <label for="adminPassword">كلمة المرور:</label>
-        <input type="password" id="adminPassword" required>
-        
-        <button onclick="loginAdmin()">دخول</button>
-        
-        <p style="text-align: center; margin-top: 20px;">
-            <button onclick="showLoginPage()" class="text-link">
-                العودة للصفحة الرئيسية
-            </button>
-        </p>
-    </div>
-
-    <!-- لوحة تحكم المدير -->
+    <!-- إضافة صفحة لوحة تحكم المدير -->
     <div id="adminDashboard" class="container hidden">
         <h1>لوحة تحكم المدير</h1>
-        
-        <div class="stats-box">
-            <h3>الإحصائيات الشاملة:</h3>
-            <p>إجمالي حالات التوقف: <span id="totalStoppages">0</span></p>
-            <p>متوسط المدة: <span id="averageDuration">0</span> ساعة</p>
+        <div id="adminDataView">
+            <h3>البيانات المحفوظة:</h3>
+            <div id="dataList"></div>
         </div>
-
-        <input type="text" id="searchInput" placeholder="ابحث بحسب السبب...">
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>التاريخ</th>
-                    <th>السبب</th>
-                    <th>المدة</th>
-                    <th>الإجراءات</th>
-                </tr>
-            </thead>
-            <tbody id="stoppageTable">
-                <!-- البيانات ستظهر هنا -->
-            </tbody>
-        </table>
+        <button onclick="showLoginPage()">العودة للصفحة الرئيسية</button>
     </div>
 
+    <!-- بقية الصفحات كما هي -->
+
     <script>
-        // بيانات النظام
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        let stoppageRecords = JSON.parse(localStorage.getItem('stoppages')) || [];
-        const ADMIN_CREDENTIALS = { username: "admin", password: "admin123" };
+        // بيانات الاعتماد الثابتة للمدير
+        const ADMIN_CREDENTIALS = {
+            email: "admin@example.com",
+            password: "admin123"
+        };
 
-        // إدارة الصفحات
-        const pages = [
-            'userLoginPage', 
-            'registerPage', 
-            'dataPage', 
-            'adminLoginPage',
-            'adminDashboard'
-        ];
-
+        // تحسين وظيفة التحويل بين الصفحات
         function showPage(pageId) {
+            const pages = [
+                'userLoginPage',
+                'registerPage',
+                'dataPage',
+                'adminLoginPage',
+                'adminDashboard'
+            ];
+            
             pages.forEach(page => {
-                document.getElementById(page).classList.toggle('hidden', page !== pageId);
+                const element = document.getElementById(page);
+                if (page === pageId) {
+                    element.classList.remove('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
             });
         }
 
-        // وظائف المستخدم العادي
-        function loginUser() {
-            const email = document.getElementById('userLoginEmail').value;
-            const password = document.getElementById('userLoginPassword').value;
-            
-            const user = users.find(u => u.email === email && u.password === password);
-            if (user) {
-                showPage('dataPage');
-                updateStats();
-            } else {
-                alert('بيانات الدخول غير صحيحة!');
+        // تحديث وظائف التحويل
+        function showLoginPage() { showPage('userLoginPage'); }
+        function showRegisterPage() { showPage('registerPage'); }
+        function showDataPage() { showPage('dataPage'); }
+        function showAdminLoginPage() { showPage('adminLoginPage'); }
+
+        // تحديث دالة تسجيل الدخول كمدير
+        async function loginAdmin() {
+            const email = document.getElementById('adminLoginEmail').value;
+            const password = document.getElementById('adminLoginPassword').value;
+
+            try {
+                const response = await fetch('https://tawaqoff.glitch.me/api/admin-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('تم تسجيل الدخول كمدير بنجاح');
+                    showPage('adminDashboard');
+                    loadAdminData();
+                } else {
+                    alert('بيانات الدخول غير صحيحة');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء الاتصال بالخادم');
             }
         }
 
-        function registerUser() {
-            const email = document.getElementById('userRegisterEmail').value;
-            const password = document.getElementById('userRegisterPassword').value;
-            
-            if (users.some(u => u.email === email)) {
-                alert('البريد الإلكتروني مسجل مسبقًا!');
-                return;
+        // دالة لتحميل بيانات المدير
+        async function loadAdminData() {
+            try {
+                const response = await fetch('https://tawaqoff.glitch.me/api/get-data');
+                const data = await response.json();
+                
+                const dataList = document.getElementById('dataList');
+                dataList.innerHTML = data.map(item => `
+                    <div class="data-item">
+                        <p>الاسم: ${item.name}</p>
+                        <p>الهاتف: ${item.phone}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading data:', error);
             }
-            
-            users.push({ email, password });
-            localStorage.setItem('users', JSON.stringify(users));
-            alert('تم التسجيل بنجاح!');
-            showPage('userLoginPage');
-        }
-
-        // وظائف المدير
-        function loginAdmin() {
-            const username = document.getElementById('adminUsername').value;
-            const password = document.getElementById('adminPassword').value;
-            
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                showPage('adminDashboard');
-                loadAdminData();
-            } else {
-                alert('بيانات الدخول غير صحيحة!');
-            }
-        }
-
-        function loadAdminData() {
-            document.getElementById('totalStoppages').textContent = stoppageRecords.length;
-            const average = stoppageRecords.reduce((acc, curr) => acc + curr.duration, 0) / stoppageRecords.length || 0;
-            document.getElementById('averageDuration').textContent = average.toFixed(1);
-            
-            const tbody = document.getElementById('stoppageTable');
-            tbody.innerHTML = stoppageRecords.map(record => `
-                <tr>
-                    <td>${new Date(record.date).toLocaleDateString()}</td>
-                    <td>${record.reason}</td>
-                    <td>${record.duration} ساعة</td>
-                    <td>
-                        <button onclick="deleteRecord('${record.id}')">حذف</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        // وظائف مشتركة
-        function saveStoppageData() {
-            const record = {
-                id: Date.now().toString(),
-                date: new Date().toISOString(),
-                reason: document.getElementById('stoppageReason').value,
-                duration: document.getElementById('stoppageDuration').value
-            };
-            
-            stoppageRecords.push(record);
-            localStorage.setItem('stoppages', JSON.stringify(stoppageRecords));
-            updateStats();
-            alert('تم حفظ البيانات بنجاح!');
-        }
-
-        function updateStats() {
-            document.getElementById('currentStoppage').textContent = stoppageRecords.length;
-            const percentage = (stoppageRecords.length / users.length * 100) || 0;
-            document.getElementById('stoppagePercentage').textContent = `${percentage.toFixed(1)}%`;
-        }
-
-        function deleteRecord(id) {
-            stoppageRecords = stoppageRecords.filter(record => record.id !== id);
-            localStorage.setItem('stoppages', JSON.stringify(stoppageRecords));
-            loadAdminData();
         }
 
         // تهيئة أولية
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filtered = stoppageRecords.filter(record => 
-                record.reason.toLowerCase().includes(searchTerm)
-            );
-            document.getElementById('stoppageTable').innerHTML = filtered.map(record => `
-                <tr>
-                    <td>${new Date(record.date).toLocaleDateString()}</td>
-                    <td>${record.reason}</td>
-                    <td>${record.duration} ساعة</td>
-                    <td>
-                        <button onclick="deleteRecord('${record.id}')">حذف</button>
-                    </td>
-                </tr>
-            `).join('');
-        });
-
         showPage('userLoginPage');
     </script>
 </body>
