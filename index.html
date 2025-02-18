@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>نظام تسجيل الدخول ومسك البيانات</title>
+    <style>
+        /* أنماط CSS تبقى كما هي بدون تغيير */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="password"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        .filter-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .filter-container select {
+            padding: 5px;
+        }
+        .stats {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9f7ef;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            color: #155724;
+        }
+        .admin-login-box {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .admin-login-box a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .admin-login-box:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
 
+    <!-- صفحة تسجيل الدخول الأساسية -->
+    <div id="userLoginPage" class="container">
+        <h1>تسجيل الدخول</h1>
+        <label for="userLoginEmail">البريد الإلكتروني:</label>
+        <input type="email" id="userLoginEmail" required>
+        <label for="userLoginPassword">كلمة المرور:</label>
+        <input type="password" id="userLoginPassword" required>
+        <button onclick="loginUser()">تسجيل الدخول</button>
+        
+        <p style="text-align: center; margin-top: 20px;">
+            ليس لديك حساب؟ 
+            <button onclick="showRegisterPage()" style="background: none; color: #007bff; border: none; cursor: pointer;">
+                إنشاء حساب جديد
+            </button>
+        </p>
+        
+        <div class="admin-login-box" onclick="showAdminLoginPage()">
+            <a href="#">دخول خاص بالمديرية</a>
+        </div>
+    </div>
+
+    <!-- صفحة تسجيل المستخدمين الجدد -->
+    <div id="registerPage" class="container hidden">
+        <h1>إنشاء حساب جديد</h1>
+        <label for="userRegisterEmail">البريد الإلكتروني:</label>
+        <input type="email" id="userRegisterEmail" required>
+        <label for="userRegisterPassword">كلمة المرور:</label>
+        <input type="password" id="userRegisterPassword" required>
+        <button onclick="registerUser()">إنشاء الحساب</button>
+        
+        <p style="text-align: center; margin-top: 20px;">
+            لديك حساب؟ 
+            <button onclick="showLoginPage()" style="background: none; color: #007bff; border: none; cursor: pointer;">
+                تسجيل الدخول
+            </button>
+        </p>
+    </div>
+
+    <!-- صفحة إدخال البيانات -->
+    <div id="dataPage" class="container hidden">
+        <h1>إدخال البيانات</h1>
+        <label for="userName">الاسم الكامل:</label>
+        <input type="text" id="userName" required>
+        <label for="userPhone">رقم الهاتف:</label>
+        <input type="tel" id="userPhone" required>
+        <button onclick="saveData()">حفظ البيانات</button>
+    </div>
+
+    <!-- صفحة دخول المدير (التعديل الرئيسي هنا) -->
+    <div id="adminLoginPage" class="container hidden">
+        <h1>دخول المدير</h1>
+        <label for="adminUsername">اسم المستخدم:</label>
+        <input type="text" id="adminUsername" required>
+        <label for="adminPassword">كلمة المرور:</label>
+        <input type="password" id="adminPassword" required>
+        <button onclick="loginAdmin()">دخول</button>
+        
+        <p style="text-align: center; margin-top: 20px;">
+            <button onclick="showLoginPage()" style="background: none; color: #007bff; border: none; cursor: pointer;">
+                العودة لتسجيل الدخول العادي
+            </button>
+        </p>
+    </div>
+
+    <script>
+        // بيانات الاعتماد الثابتة للمدير (يمكنك تعديلها)
+        const ADMIN_CREDENTIALS = {
+            username: "admin",
+            password: "admin123"
+        };
+
+        // وظائف التحكم بين الصفحات
+        function showLoginPage() {
+            togglePage('userLoginPage');
+        }
+
+        function showRegisterPage() {
+            togglePage('registerPage');
+        }
+
+        function showDataPage() {
+            togglePage('dataPage');
+        }
+
+        function showAdminLoginPage() {
+            togglePage('adminLoginPage');
+        }
+
+        function togglePage(pageId) {
+            const pages = ['userLoginPage', 'registerPage', 'dataPage', 'adminLoginPage'];
+            pages.forEach(page => {
+                document.getElementById(page).classList.toggle('hidden', page !== pageId);
+            });
+        }
+
+        // وظيفة تسجيل الدخول للمستخدم العادي
+        function loginUser() {
+            const email = document.getElementById('userLoginEmail').value;
+            const password = document.getElementById('userLoginPassword').value;
+
+            // هنا يجب إضافة اتصال بالخادم للتحقق من البيانات
+            if(email && password) {
+                showDataPage();
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
+        // وظيفة تسجيل المستخدم الجديد
+        function registerUser() {
+            const email = document.getElementById('userRegisterEmail').value;
+            const password = document.getElementById('userRegisterPassword').value;
+
+            // هنا يجب إضافة اتصال بالخادم لتسجيل المستخدم
+            if(email && password) {
+                alert('تم إنشاء الحساب بنجاح!');
+                showLoginPage();
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
+        // وظيفة تسجيل الدخول كمدير (التعديل الرئيسي هنا)
+        function loginAdmin() {
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if(username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                alert('تم تسجيل الدخول كمدير بنجاح!');
+                // توجيه المدير إلى لوحة التحكم
+                window.location.href = '/admin-dashboard.html';
+            } else {
+                alert('بيانات الدخول غير صحيحة!');
+            }
+        }
+
+        // وظيفة حفظ البيانات
+        function saveData() {
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+
+            if(name && phone) {
+                alert('تم حفظ البيانات بنجاح!');
+                // هنا يمكن إضافة منطق لحفظ البيانات في الخادم
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+    </script>
+
+</body>
+</html>
